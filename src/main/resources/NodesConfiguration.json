@@ -1,0 +1,52 @@
+[
+  {
+    "nodeName": "Node001",
+    "nodeId": "001",
+    "nodePassword": "Node001P",
+    "portNumber": "8081",
+    "transactionSecretKey": "transactionSecretKey1",
+    "authority": ["Node002"],
+    "authorizationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub2RlTmFtZSI6Ik5vZGUwMDEiLCJub2RlSWQiOiIwMDEiLCJwb3J0TnVtYmVyIjoiODA4MSJ9.77QQZuXtHCpMfCTgpbRRyPNnXZ0AZsX1C00yjthdVpU",
+    "secretMiningKey": []
+  },
+  {
+    "nodeName": "Node002",
+    "nodeId": "002",
+    "nodePassword": "Node002P",
+    "portNumber": "8082",
+    "transactionSecretKey": "transactionSecretKey2",
+    "authority": ["Node001", "Node003"],
+    "authorizationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub2RlTmFtZSI6Ik5vZGUwMDIiLCJub2RlSWQiOiIwMDIiLCJwb3J0TnVtYmVyIjoiODA4MiJ9.oplM0XCzrbmYxReXSXNt5JQA5u9ccLPUcAtajxwnMA8",
+    "secretMiningKey": []
+  },
+  {
+    "nodeName": "Node003",
+    "nodeId": "003",
+    "nodePassword": "Node003P",
+    "portNumber": "8083",
+    "transactionSecretKey": "transactionSecretKey3",
+    "authority": ["Node002", "Node004"],
+    "authorizationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub2RlTmFtZSI6Ik5vZGUwMDMiLCJub2RlSWQiOiIwMDMiLCJwb3J0TnVtYmVyIjoiODA4MyJ9.qsZu7ald84Wz-3gueZLnCH1Qjug2JbYs4CoeTKptRTc",
+    "secretMiningKey": []
+  },
+  {
+    "nodeName": "Node004",
+    "nodeId": "004",
+    "nodePassword": "Node004P",
+    "portNumber": "8084",
+    "transactionSecretKey": "transactionSecretKey4",
+    "authority": ["Node003", "Node005"],
+    "authorizationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub2RlTmFtZSI6Ik5vZGUwMDQiLCJub2RlSWQiOiIwMDQiLCJwb3J0TnVtYmVyIjoiODA4NCJ9.Fc3w7FVmWYEOJ1gIy9ZIjgcTc-itg9cu3RiqOX9mwXM",
+    "secretMiningKey": []
+  },
+  {
+    "nodeName": "Node005",
+    "nodeId": "005",
+    "nodePassword": "Node005P",
+    "portNumber": "8085",
+    "transactionSecretKey": "transactionSecretKey5",
+    "authority": ["Node004"],
+    "authorizationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub2RlTmFtZSI6Ik5vZGUwMDUiLCJub2RlSWQiOiIwMDUiLCJwb3J0TnVtYmVyIjoiODA4NSJ9.nIx5xp2Qqz4ZZ_6FkKwUofaLP9av8MeEADbloYu7IlM",
+    "secretMiningKey": []
+  }
+]
