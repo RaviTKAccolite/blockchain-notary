@@ -41,4 +41,14 @@ public class NotaryController {
     return ResponseEntity.ok().body("Successful");
   }
 
+  @PostMapping(value = "/validateMiningRequest")
+  public ResponseEntity<String> validateMiningRequest(
+      @RequestBody TransactionInitializerRequestBody requestBody,
+      @RequestHeader(value="node-id", required = false) String nodeId)
+      throws Exception {
+    log.info("InitializeTransaction called by "+ requestBody.getInitializerName());
+    notaryService.validateMiningRequest(nodeId);
+    return ResponseEntity.ok().body("Successful");
+  }
+
 }

@@ -74,6 +74,42 @@ public class NotaryServiceImpl implements NotaryService {
 
   }
 
+  @Override
+  public void validateMiningRequest(String triggeredNodeId) throws Exception {
+    List<NodesConfiguration> nodesConfigurationList = fetchConfigurationList();
+    Map<String, Boolean> visitedNode = new HashMap<String, Boolean>();
+    List<String> connectedNodes = new ArrayList<>();
+
+    Boolean mineRequestValidated = nodeBroadcaster(triggeredNodeId, nodesConfigurationList, visitedNode, connectedNodes);
+    if(mineRequestValidated && nodesConfigurationList.size() == visitedNode.size()){
+
+    }
+
+  }
+
+  private Boolean nodeBroadcaster(String currentNodeId, List<NodesConfiguration> nodesConfigurationList,
+      Map<String, Boolean> visitedNode, List<String> connectedNodes) throws Exception {
+    NodesConfiguration currentNode = getSpecificNodeConfig(currentNodeId, nodesConfigurationList);
+
+    visitedNode.put(currentNodeId, Boolean.TRUE);
+    System.out.println("DFS : "+currentNodeId);
+    // TODO logic to call the mining validation - node API
+
+    connectedNodes.addAll(currentNode.getAuthority());
+
+    while (!ObjectUtils.isEmpty(connectedNodes)) {
+      String nextNodeId = connectedNodes.get(0);
+      if (!visitedNode.containsKey(nextNodeId) || !visitedNode.get(nextNodeId)){
+        Boolean isValidMine = nodeBroadcaster(nextNodeId, nodesConfigurationList, visitedNode, connectedNodes);
+        return isValidMine;
+      } else {
+        connectedNodes.remove(nextNodeId);
+      }
+    }
+
+    return true;
+  }
+
   private Boolean nextNodeTraversalDFS(String currentNodeId, String acceptorId, Map<String, Boolean> visitedNode,
       List<NodesConfiguration> nodesConfigurationList, List<String> connectedNodes,Boolean isDestinationNode)
       throws Exception {

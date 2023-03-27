@@ -10,4 +10,6 @@ public interface NotaryService {
 
   void initializeTransaction(TransactionInitializerRequestBody requestBody, String nodeId)
       throws Exception;
+
+  void validateMiningRequest(String nodeId) throws Exception;
 }
