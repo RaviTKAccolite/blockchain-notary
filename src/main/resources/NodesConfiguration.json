@@ -4,18 +4,17 @@
     "nodeId": "001",
     "nodePassword": "Node001P",
     "portNumber": "8081",
-    "transactionSecretKey": "transactionSecretKey1000",
+    "transactionSecretKey": "transactionSecretKey1001",
     "authority": ["002"],
     "authorizationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub2RlTmFtZSI6Ik5vZGUwMDEiLCJub2RlSWQiOiIwMDEiLCJwb3J0TnVtYmVyIjoiODA4MSJ9.77QQZuXtHCpMfCTgpbRRyPNnXZ0AZsX1C00yjthdVpU",
-    "secretMining": [
-    ]
+    "secretMiningKey": []
   },
   {
     "nodeName": "Node002",
     "nodeId": "002",
     "nodePassword": "Node002P",
     "portNumber": "8082",
-    "transactionSecretKey": "transactionSecretKey2000",
+    "transactionSecretKey": "transactionSecretKey2001",
     "authority": ["001", "003"],
     "authorizationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub2RlTmFtZSI6Ik5vZGUwMDIiLCJub2RlSWQiOiIwMDIiLCJwb3J0TnVtYmVyIjoiODA4MiJ9.oplM0XCzrbmYxReXSXNt5JQA5u9ccLPUcAtajxwnMA8",
     "secretMiningKey": []
@@ -25,7 +24,7 @@
     "nodeId": "003",
     "nodePassword": "Node003P",
     "portNumber": "8083",
-    "transactionSecretKey": "transactionSecretKey3000",
+    "transactionSecretKey": "transactionSecretKey3001Jump",
     "authority": ["002", "004"],
     "authorizationToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub2RlTmFtZSI6Ik5vZGUwMDMiLCJub2RlSWQiOiIwMDMiLCJwb3J0TnVtYmVyIjoiODA4MyJ9.qsZu7ald84Wz-3gueZLnCH1Qjug2JbYs4CoeTKptRTc",
     "secretMiningKey": []

@@ -2,6 +2,7 @@ package com.example.demo.service.util;
 
 
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -12,7 +13,7 @@ public class AESEncryption {
   private Cipher encryptionCipher;
 
   private SecretKey secretKeyGenerator(String keyString) throws Exception {
-    byte[] encodedKey     = Base64.getDecoder().decode(keyString);
+    byte[] encodedKey     = keyString.getBytes(StandardCharsets.UTF_8);
     SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
     return key;
   }

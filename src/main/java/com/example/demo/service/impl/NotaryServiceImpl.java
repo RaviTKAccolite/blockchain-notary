@@ -3,9 +3,12 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.NodesConfiguration;
 import com.example.demo.model.AuthorizationRequestBody;
 import com.example.demo.model.TransactionInitializerRequestBody;
+import com.example.demo.model.node.TransactionValidationRequest;
+import com.example.demo.model.node.TransactionValidationResponse;
 import com.example.demo.service.NotaryService;
 import com.example.demo.service.util.AESEncryption;
 import com.example.demo.service.util.JsonReader;
+import com.example.demo.service.util.NodeIntegrationService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -23,6 +27,9 @@ public class NotaryServiceImpl implements NotaryService {
   JsonReader jsonReader = new JsonReader();
 
   AESEncryption aesEncryption = new AESEncryption();
+
+  @Autowired
+  NodeIntegrationService nodeIntegrationService;
 
   @Override
   public HttpHeaders getAuthorizationToken(AuthorizationRequestBody requestBody) throws Exception {
@@ -61,11 +68,18 @@ public class NotaryServiceImpl implements NotaryService {
     }
 
     // pass it on the next node
+    TransactionValidationRequest transactionValidationRequest = TransactionValidationRequest
+        .builder()
+        .initializerId(acceptorNodeConfiguration.getNodeId())
+        .acceptorId(acceptorNodeConfiguration.getNodeId())
+        .message(requestBody.getMessage())
+        .build();
+
     Map<String, Boolean> visitedNode = new HashMap<String, Boolean>();
     List<String> connectedNodes = new ArrayList<>();
     Boolean isDestinationNode = false;
     Boolean isSuccessfulTransaction = nextNodeTraversalDFS(initializerNodeConfiguration.getNodeId(),
-        acceptorNodeConfiguration.getNodeId(), visitedNode, nodesConfigurationList, connectedNodes, isDestinationNode);
+        acceptorNodeConfiguration.getNodeId(), visitedNode, nodesConfigurationList, connectedNodes, isDestinationNode, transactionValidationRequest);
     if(isSuccessfulTransaction){
 //      return isSuccessfulTransaction;
     } else {
@@ -111,17 +125,25 @@ public class NotaryServiceImpl implements NotaryService {
   }
 
   private Boolean nextNodeTraversalDFS(String currentNodeId, String acceptorId, Map<String, Boolean> visitedNode,
-      List<NodesConfiguration> nodesConfigurationList, List<String> connectedNodes,Boolean isDestinationNode)
+      List<NodesConfiguration> nodesConfigurationList, List<String> connectedNodes,Boolean isDestinationNode, TransactionValidationRequest transactionValidationRequest)
       throws Exception {
 
     NodesConfiguration currentNode = getSpecificNodeConfig(currentNodeId, nodesConfigurationList);
     visitedNode.put(currentNodeId, Boolean.TRUE);
     System.out.println("DFS : "+currentNodeId);
-    // TODO logic to call the transaction validation  API
+    TransactionValidationResponse transactionValidationResponse =
+        nodeIntegrationService.nodeTransactionValidation(transactionValidationRequest,
+            currentNode.getPortNumber()).getBody();
+
+    // transaction failed scenario
+    if(!transactionValidationResponse.getIsValidTransaction()){
+      return false;
+    }
 
     isDestinationNode = acceptorId.contentEquals(currentNodeId);
-    if(isDestinationNode){
-      return true;//TODO change this as per the response of destination node
+    if(isDestinationNode && transactionValidationResponse.getIsValidTransaction() &&
+        transactionValidationResponse.getIsDestination()){
+      return true;
     }
 
     connectedNodes.addAll(currentNode.getAuthority());
@@ -130,7 +152,7 @@ public class NotaryServiceImpl implements NotaryService {
       String nextNodeId = connectedNodes.get(0);
       if (!visitedNode.containsKey(nextNodeId) || !visitedNode.get(nextNodeId)){
         boolean destinationNodeReached =
-            nextNodeTraversalDFS(nextNodeId, acceptorId, visitedNode, nodesConfigurationList, connectedNodes, isDestinationNode);
+            nextNodeTraversalDFS(nextNodeId, acceptorId, visitedNode, nodesConfigurationList, connectedNodes, isDestinationNode, transactionValidationRequest);
         return destinationNodeReached;
       } else {
         connectedNodes.remove(nextNodeId);
