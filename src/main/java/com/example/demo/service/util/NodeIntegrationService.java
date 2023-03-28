@@ -21,13 +21,20 @@ public class NodeIntegrationService {
   @Autowired
   private RestTemplate restTemplate;
 
+  @Autowired
+  AESEncryption aesEncryption;
+
   public ResponseEntity<TransactionValidationResponse> nodeTransactionValidation(
-      TransactionValidationRequest transactionValidationRequest, String hostPort) throws Exception {
+      TransactionValidationRequest transactionValidationRequest, String hostPort, boolean isDestinationNode) throws Exception {
     try {
       log.info("Calling init Transaction notary API");
       String hostUrl = "http://localhost:"+hostPort+"/v1/transactionValidation";
+      HttpHeaders httpHeaders = getBaseRequestHeaders();
+      if(isDestinationNode){
+        httpHeaders.add("public-key", aesEncryption.getPublicKey());
+      }
       HttpEntity<TransactionValidationRequest> requestEntity =
-          new HttpEntity<>(transactionValidationRequest, getBaseRequestHeaders());
+          new HttpEntity<>(transactionValidationRequest, httpHeaders);
       return restTemplate.exchange(hostUrl, HttpMethod.POST,
           requestEntity, new ParameterizedTypeReference<TransactionValidationResponse>() {});
     } catch (Exception e) {

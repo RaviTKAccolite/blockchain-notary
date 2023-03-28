@@ -173,17 +173,18 @@ public class NotaryServiceImpl implements NotaryService {
 
     NodesConfiguration currentNode = getSpecificNodeConfig(currentNodeId, nodesConfigurationList);
     visitedNode.put(currentNodeId, Boolean.TRUE);
+    isDestinationNode = acceptorId.contentEquals(currentNodeId);
     System.out.println("DFS : "+currentNodeId);
     TransactionValidationResponse transactionValidationResponse =
         nodeIntegrationService.nodeTransactionValidation(transactionValidationRequest,
-            currentNode.getPortNumber()).getBody();
+            currentNode.getPortNumber(), isDestinationNode).getBody();
 
     // transaction failed scenario
     if(!transactionValidationResponse.getIsValidTransaction()){
       return false;
     }
 
-    isDestinationNode = acceptorId.contentEquals(currentNodeId);
+
     if(isDestinationNode && transactionValidationResponse.getIsValidTransaction() &&
         transactionValidationResponse.getIsDestination()){
       return true;
