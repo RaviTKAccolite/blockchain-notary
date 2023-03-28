@@ -30,4 +30,8 @@ public class AESEncryption {
     return Base64.getEncoder().encodeToString(encryptedBytes);
   }
 
+  public String getPublicKey(){
+    return Base64.getEncoder().encodeToString(encryptionCipher.getIV());
+  }
+
 }
