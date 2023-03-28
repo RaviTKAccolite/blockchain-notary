@@ -1,0 +1,11 @@
+{
+  "silverMine": "",
+  "goldMine": "",
+  "diamondMine": "",
+  "silverMineReward": 25000,
+  "goldMineReward": 50000,
+  "diamondMineReward": 100000,
+  "jwtHeader": "{\"alg\":\"HS256\",\"typ\":\"JWT\"}",
+  "jwtPayload": "{\"sub\":\"1234567890\",\"name\":\"John Doe\",\"iat\":1516239022}",
+  "alphaNumericString": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz!@#$%^&*()_?<>"
+}

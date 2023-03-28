@@ -7,7 +7,9 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AESEncryption {
 
   private Cipher encryptionCipher;

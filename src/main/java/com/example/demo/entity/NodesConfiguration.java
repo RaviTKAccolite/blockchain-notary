@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.model.MiningCount;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class NodesConfiguration {
 
   private String authorizationToken;
 
-  private List<String> secretMiningKey;
+  private MiningCount miningCount;
 
 
 }

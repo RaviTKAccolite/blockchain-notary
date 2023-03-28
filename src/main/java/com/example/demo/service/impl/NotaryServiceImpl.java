@@ -2,11 +2,14 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.NodesConfiguration;
 import com.example.demo.model.AuthorizationRequestBody;
+import com.example.demo.model.Mining;
+import com.example.demo.model.MiningCount;
 import com.example.demo.model.TransactionInitializerRequestBody;
 import com.example.demo.model.node.TransactionValidationRequest;
 import com.example.demo.model.node.TransactionValidationResponse;
 import com.example.demo.service.NotaryService;
 import com.example.demo.service.util.AESEncryption;
+import com.example.demo.service.util.JWTEncryption;
 import com.example.demo.service.util.JsonReader;
 import com.example.demo.service.util.NodeIntegrationService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -26,7 +29,11 @@ public class NotaryServiceImpl implements NotaryService {
 
   JsonReader jsonReader = new JsonReader();
 
-  AESEncryption aesEncryption = new AESEncryption();
+  @Autowired
+  AESEncryption aesEncryption;
+
+  @Autowired
+  JWTEncryption jwtEncryption;
 
   @Autowired
   NodeIntegrationService nodeIntegrationService;
@@ -62,10 +69,10 @@ public class NotaryServiceImpl implements NotaryService {
     NodesConfiguration initializerNodeConfiguration = getNodesConfiguration(requestBody.getInitializerName(),
         nodesConfigurationList);
 
-    if(nodeId.contentEquals(initializerNodeConfiguration.getNodeId())){
+//    if(nodeId.contentEquals(initializerNodeConfiguration.getNodeId())){
       String message = requestBody.getMessage();
       aesEncryption.encrypt(message, acceptorNodeConfiguration.getTransactionSecretKey());
-    }
+//    }
 
     // pass it on the next node
     TransactionValidationRequest transactionValidationRequest = TransactionValidationRequest
@@ -96,9 +103,45 @@ public class NotaryServiceImpl implements NotaryService {
 
     Boolean mineRequestValidated = nodeBroadcaster(triggeredNodeId, nodesConfigurationList, visitedNode, connectedNodes);
     if(mineRequestValidated && nodesConfigurationList.size() == visitedNode.size()){
+      // create a new node
+//      if("newMine".contentEquals()){
+////?TODO
+//      } else if (){
+        // create new JWT tokens and reward the miner
+      //silver mining
+      JsonReader jsonReader = new JsonReader();
+      Mining mining = jsonReader.jsonToObject("/Mining.json", Mining.class);
+      String jwtToken = jwtEncryption.getNewJwtToken(mining.getJwtHeader(), mining.getJwtPayload(),
+          4, mining.getAlphaNumericString());
+      mining.setSilverMine(jwtToken);
+
+
+        // call reward miner API TODO
+
+//      }
 
     }
 
+  }
+
+  @Override
+  public List<String> miningRequest(String nodeId) throws Exception {
+    JsonReader jsonReader = new JsonReader();
+    Mining mining = jsonReader.jsonToObject("/Mining.json", Mining.class);
+    List<NodesConfiguration> nodesConfigurationList = fetchConfigurationList();
+    NodesConfiguration currentNode = getSpecificNodeConfig(nodeId, nodesConfigurationList);
+
+    MiningCount miningCount = currentNode.getMiningCount();
+    String question = "";
+    if(miningCount.getSilverMineCount()<6 ){
+      question = mining.getSilverMine();
+    } else if(miningCount.getGoldMineCount()<6 ) {
+      question = mining.getGoldMine();
+    } else {
+      question = mining.getDiamondMine();
+    }
+
+    return List.of(question);
   }
 
   private Boolean nodeBroadcaster(String currentNodeId, List<NodesConfiguration> nodesConfigurationList,

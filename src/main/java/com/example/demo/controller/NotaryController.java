@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.AuthorizationRequestBody;
 import com.example.demo.model.TransactionInitializerRequestBody;
 import com.example.demo.service.NotaryService;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,9 +47,18 @@ public class NotaryController {
       @RequestBody TransactionInitializerRequestBody requestBody,
       @RequestHeader(value="node-id", required = false) String nodeId)
       throws Exception {
-    log.info("InitializeTransaction called by "+ requestBody.getInitializerName());
+    log.info("ValidateMiningRequest called by "+ requestBody.getInitializerName());
     notaryService.validateMiningRequest(nodeId);
     return ResponseEntity.ok().body("Successful");
+  }
+
+  @PostMapping(value = "/miningRequest")
+  public ResponseEntity<List<String>> miningRequest(
+      @RequestHeader(value="node-id", required = true) String nodeId)
+      throws Exception {
+    log.info("MiningRequest called by "+ nodeId);
+    List<String> miningQuestion = notaryService.miningRequest(nodeId);
+    return ResponseEntity.ok().body(miningQuestion);
   }
 
 }
