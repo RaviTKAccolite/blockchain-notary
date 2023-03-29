@@ -77,7 +77,7 @@ public class NotaryServiceImpl implements NotaryService {
     // pass it on the next node
     TransactionValidationRequest transactionValidationRequest = TransactionValidationRequest
         .builder()
-        .initializerId(acceptorNodeConfiguration.getNodeId())
+        .initializerId(initializerNodeConfiguration.getNodeId())
         .acceptorId(acceptorNodeConfiguration.getNodeId())
         .message(requestBody.getMessage())
         .build();
